@@ -1,0 +1,24 @@
+---
+- name: Build an image and run it
+  hosts: server
+  tasks:
+    - name: upload the site directory to the docker host
+      synchronize: src=site dest=/tmp
+
+    - name: build the image
+      docker_image: >
+        name=built-by-ansible
+        tag=ex1
+        path=/tmp/site
+        state=present
+
+    - name: run the site in a docker container
+      docker_container:
+        name: site-ex1
+        image: "built-by-ansible:ex1"
+        state: started
+        restart: yes
+        ports:
+         - "8080:80"
+        volumes:
+         - "/tmp/site:/var/www/html"
