@@ -1,0 +1,84 @@
+
+tower-cli organization create --name="Default"
+
+Your license only permits a single organization to exist.
+
+tower-cli organization create --name="Sidra" --description="pvt ltd"
+tower-cli team create --name="Ops" --organization=Default --description="The Ops Team"
+tower-cli team create --name="QA" --organization=Default --description="Assures quality of software"
+tower-cli team create --name="Dev" --organization=Default --description="Develops software"
+
+
+
+# Generic examples
+tower-cli project create --name="Site-Example" --description="Example Docker playbook" --scm-type=git --scm-url="https://github.com/atul-ram/ansible-docker-ex1.git" --organization "Default" --wait
+
+# Sidra team
+tower-cli user create --username="Tushar" --password="password" --email=tushar@sidra.org --first-name=Tushar --last-name=Pathare
+tower-cli organization associate --organization="Default" --user=Tushar
+tower-cli team associate --team=Ops --user=Tushar
+
+tower-cli user create --username="Ahmad" --password="password" --email=ahmad@sidra.org --first-name=Ahmad --last-name=shaikh
+tower-cli organization associate --organization="Default" --user=Ahmad
+tower-cli team associate --team=Ops --user=Ahmad
+
+
+tower-cli user create --username="jack" --password="password" --email=jack@sidra.org --first-name=jack --last-name=Smith
+tower-cli organization associate --organization="Default" --user=jack
+tower-cli team associate --team=Dev --user=jack
+
+
+tower-cli user create --username="peter" --password="password" --email=peter@sidra.org --first-name=peter --last-name=parker
+tower-cli organization associate --organization="Default" --user=peter
+tower-cli team associate --team=QA --user=peter
+
+
+# Example credentials for machine
+tower-cli credential create --credential-type="Machine" --name=user1 --inputs='{"username": "user1", "password": "pass1", "become_method": "su", "become_username": "user2"}' --user=Tushar
+
+# inventory
+tower-cli inventory create --name=POC --description="POC Machines" --organization="Default" 
+
+# Examples of nested groups, associating and managing hosts/groups
+tower-cli group create --name="web servers" --inventory="POC"
+
+tower-cli host create --name="10.0.0.133" --inventory="POC"
+tower-cli host associate --host="10.0.0.133" --group="web servers"
+
+
+tower-cli job_template create --name="Hello World Docker" --description="debug statement" --inventory=POC --credential=user1 --project=Site-Example --playbook=example1.yml
+
+# Launch job without monitoring
+tower-cli job launch --job-template="Hello World Docker" --job-explanation="launched testing"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
